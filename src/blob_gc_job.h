@@ -90,9 +90,11 @@ class BlobGCJob {
   uint64_t io_bytes_written_ = 0;
 
   Status DoRunGC();
-  Status BuildIterator(std::unique_ptr<BlobFileMergeIterator>* result);
-  Status DiscardEntry(const Slice& key, const BlobIndex& blob_index,
-                      bool* discardable);
+  Status DoMergeBlobIndex(const MergeBlobIndex &new_blob_index,
+                          BlobIndex blob_index, const Slice &key);
+  Status BuildIterator(std::unique_ptr<BlobFileMergeIterator> *result);
+  Status DiscardEntry(const Slice &key, const BlobIndex &blob_index,
+                      bool *discardable);
   Status InstallOutputBlobFiles();
   Status RewriteValidKeyToLSM();
   Status DeleteInputBlobFiles();

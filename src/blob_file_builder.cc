@@ -21,6 +21,16 @@ BlobFileBuilder::BlobFileBuilder(const TitanDBOptions& db_options,
   status_ = file_->Append(buffer);
 }
 
+void BlobFileBuilder::Add(const BlobRecord& record, std::string info) {
+  assert(DictionaryEnabled());
+  BlobHandle handle;
+  Add(record, &handle);
+  // ToString to take ownership
+  BufferedHandleItem item{Slice(record.key.ToString()), std::move(handle),
+                          std::move(info)};
+  buffered_handle_items_.push_back(item);
+}
+
 void BlobFileBuilder::Add(const BlobRecord& record, BlobHandle* handle) {
   if (!ok()) return;
   if (builder_state_ == BuilderState::kBuffered) {
@@ -90,9 +100,16 @@ void BlobFileBuilder::EnterUnbuffered() {
 
 void BlobFileBuilder::FlushSampleRecords() {
   BlobHandle handle;
-  for (const std::string& record_str : sample_records_) {
+  assert(buffered_handle_items_.size() <= sample_records_.size());
+  for (size_t i = 0; i < sample_records_.size(); i++) {
+    const std::string& record_str = sample_records_[i];
     encoder_.EncodeSlice(record_str);
-    WriteEncoderData(&handle);
+    if (i < buffered_handle_items_.size()) {
+      BufferedHandleItem item = buffered_handle_items_[i];
+      WriteEncoderData(&item.handle);
+    } else {
+      WriteEncoderData(&handle);
+    }
   }
   sample_records_.clear();
   sample_str_len_ = 0;

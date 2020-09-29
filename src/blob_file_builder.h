@@ -35,6 +35,12 @@ namespace titandb {
 
 class BlobFileBuilder {
  public:
+  class BufferedHandleItem {
+   public:
+    Slice key;
+    BlobHandle handle;
+    std::string extra;
+  };
   // Constructs a builder that will store the contents of the file it
   // is building in "*file". Does not close the file. It is up to the
   // caller to sync and close the file after calling Finish().
@@ -43,6 +49,13 @@ class BlobFileBuilder {
 
   // Adds the record to the file and points the handle to it.
   void Add(const BlobRecord& record, BlobHandle* handle);
+
+  // Adds the record to the file, and buffer the record related info.
+  // Only used when dictionary compression is enabled, Called by `BlobGCJob` and
+  // `TitanTableBuilder`, caller function will save some context in std::string
+  // here, which will be used after calling `Finish`(for example, the
+  // BlobIndex).
+  void Add(const BlobRecord& record, std::string info);
 
   // Enter unbuffered state, only be called after collecting enough samples
   // for compression dictionary
@@ -69,6 +82,10 @@ class BlobFileBuilder {
 
   const std::string& GetSmallestKey() { return smallest_key_; }
   const std::string& GetLargestKey() { return largest_key_; }
+  const std::vector<BufferedHandleItem>& GetBufferedHanleItems() {
+    return buffered_handle_items_;
+  }
+  void ClearBufferedHandleItems() { buffered_handle_items_.clear(); }
 
   uint64_t live_data_size() const { return live_data_size_; }
 
@@ -107,10 +124,11 @@ class BlobFileBuilder {
   Status status_;
   BlobEncoder encoder_;
 
-  // following 3 may be refactored in to Rep
+  // following 4 may be refactored in to Rep
   std::vector<std::string> sample_records_;
   uint64_t sample_str_len_ = 0;
   std::unique_ptr<CompressionDict> compression_dict_;
+  std::vector<BufferedHandleItem> buffered_handle_items_;
 
   uint64_t num_entries_ = 0;
   std::string smallest_key_;
