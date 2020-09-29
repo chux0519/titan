@@ -6,15 +6,15 @@ namespace titandb {
 BlobFileBuilder::BlobFileBuilder(const TitanDBOptions& db_options,
                                  const TitanCFOptions& cf_options,
                                  WritableFileWriter* file)
-    : builder_state_(cf_options.blob_file_compression_options.max_dict_bytes > 0
-                         ? BuilderState::kBuffered
-                         : BuilderState::kUnbuffered),
-      cf_options_(cf_options),
+    : cf_options_(cf_options),
+      builder_state_(DictionaryEnabled() ? BuilderState::kBuffered
+                                         : BuilderState::kUnbuffered),
+
       file_(file),
       encoder_(cf_options_.blob_file_compression,
                cf_options.blob_file_compression_options) {
   BlobFileHeader header;
-  if (cf_options.blob_file_compression_options.max_dict_bytes > 0)
+  if (DictionaryEnabled())
     header.flags |= BlobFileHeader::kHasUncompressionDictionary;
   std::string buffer;
   header.EncodeTo(&buffer);
@@ -147,7 +147,7 @@ Status BlobFileBuilder::Finish() {
 
   // if has compression dictionary, encode it into meta blocks
   // and update relative fields in footer
-  if (cf_options_.blob_file_compression_options.max_dict_bytes > 0) {
+  if (DictionaryEnabled()) {
     BlockHandle meta_index_handle, uncompression_dict_handle;
     MetaIndexBuilder meta_index_builder;
     WriteCompressionDictBlock(&meta_index_builder, &uncompression_dict_handle);

@@ -63,6 +63,10 @@ class BlobFileBuilder {
   // Number of calls to Add() so far.
   uint64_t NumEntries();
 
+  bool DictionaryEnabled() const {
+    return cf_options_.blob_file_compression_options.max_dict_bytes > 0;
+  }
+
   const std::string& GetSmallestKey() { return smallest_key_; }
   const std::string& GetLargestKey() { return largest_key_; }
 
@@ -87,9 +91,9 @@ class BlobFileBuilder {
     kBuffered,
     kUnbuffered,
   };
-  BuilderState builder_state_;
 
   bool ok() const { return status().ok(); }
+
   void WriteRawBlock(const Slice& block, BlockHandle* handle);
   void WriteCompressionDictBlock(MetaIndexBuilder* meta_index_builder,
                                  BlockHandle* handle);
@@ -97,6 +101,7 @@ class BlobFileBuilder {
   void WriteEncoderData(BlobHandle* handle);
 
   TitanCFOptions cf_options_;
+  BuilderState builder_state_;
   WritableFileWriter* file_;
 
   Status status_;
