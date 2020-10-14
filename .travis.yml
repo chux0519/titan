@@ -18,7 +18,7 @@ addons:
       - libgflags-dev
       - libzstd-dev
       - lcov
-      - clang-format-7
+      - clang-format-10
 
 env:
   - BUILD_TYPE="Release"
