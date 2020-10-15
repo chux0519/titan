@@ -4,7 +4,6 @@
 #include "blob_gc_job.h"
 
 #include <inttypes.h>
-
 #include <memory>
 
 #include "blob_file_size_collector.h"

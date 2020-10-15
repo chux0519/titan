@@ -3,9 +3,10 @@
 #include <string>
 #include <utility>
 
-#include "db_impl.h"
 #include "rocksdb/compaction_filter.h"
 #include "util/mutexlock.h"
+
+#include "db_impl.h"
 
 namespace rocksdb {
 namespace titandb {

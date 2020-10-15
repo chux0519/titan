@@ -1,9 +1,10 @@
 #pragma once
 
-#include "blob_format.h"
-#include "titan/options.h"
-#include "titan_stats.h"
 #include "util/file_reader_writer.h"
+
+#include "titan/options.h"
+#include "blob_format.h"
+#include "titan_stats.h"
 
 namespace rocksdb {
 namespace titandb {

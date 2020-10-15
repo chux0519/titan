@@ -8,9 +8,10 @@
 
 #include "file/filename.h"
 #include "test_util/sync_point.h"
-#include "titan_stats.h"
 #include "util/crc32c.h"
 #include "util/string_util.h"
+
+#include "titan_stats.h"
 
 namespace rocksdb {
 namespace titandb {

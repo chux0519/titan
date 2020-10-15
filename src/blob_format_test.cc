@@ -1,6 +1,7 @@
+#include "blob_format.h"
+
 #include "test_util/testharness.h"
 
-#include "blob_format.h"
 #include "testutil.h"
 #include "util.h"
 

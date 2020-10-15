@@ -6,6 +6,12 @@
 
 #include <inttypes.h>
 
+#include "logging/log_buffer.h"
+#include "monitoring/statistics_impl.h"
+#include "port/port.h"
+#include "util/autovector.h"
+#include "util/threadpool_imp.h"
+
 #include "base_db_listener.h"
 #include "blob_file_builder.h"
 #include "blob_file_iterator.h"
@@ -13,14 +19,9 @@
 #include "blob_gc.h"
 #include "compaction_filter.h"
 #include "db_iter.h"
-#include "logging/log_buffer.h"
-#include "monitoring/statistics_impl.h"
-#include "port/port.h"
 #include "table_factory.h"
 #include "titan_build_version.h"
 #include "titan_stats.h"
-#include "util/autovector.h"
-#include "util/threadpool_imp.h"
 
 namespace rocksdb {
 namespace titandb {

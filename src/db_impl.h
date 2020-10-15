@@ -5,11 +5,11 @@
 #include "rocksdb/threadpool.h"
 #include "util/repeatable_thread.h"
 
+#include "titan/db.h"
 #include "blob_file_manager.h"
 #include "blob_file_set.h"
 #include "blob_index_merge_operator.h"
 #include "table_factory.h"
-#include "titan/db.h"
 #include "titan_stats.h"
 
 namespace rocksdb {

@@ -1,14 +1,15 @@
 #pragma once
 
+#include "db/db_impl/db_impl.h"
+#include "rocksdb/statistics.h"
+#include "rocksdb/status.h"
+
+#include "titan/options.h"
 #include "blob_file_builder.h"
 #include "blob_file_iterator.h"
 #include "blob_file_manager.h"
 #include "blob_file_set.h"
 #include "blob_gc.h"
-#include "db/db_impl/db_impl.h"
-#include "rocksdb/statistics.h"
-#include "rocksdb/status.h"
-#include "titan/options.h"
 #include "titan_stats.h"
 #include "version_edit.h"
 

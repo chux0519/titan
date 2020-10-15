@@ -28,16 +28,16 @@ int main() {
 }
 #else
 
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <sys/types.h>
 #include <algorithm>
 #include <array>
 #include <chrono>
 #include <cinttypes>
 #include <exception>
+#include <fcntl.h>
 #include <queue>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/types.h>
 #include <thread>
 
 #include "db/db_impl/db_impl.h"
@@ -73,7 +73,6 @@ int main() {
 #include "test_util/sync_point.h"
 #endif  // !(defined NDEBUG) || !defined(OS_WIN)
 #include "test_util/testutil.h"
-
 #include "utilities/merge_operators.h"
 
 #include "titan/db.h"

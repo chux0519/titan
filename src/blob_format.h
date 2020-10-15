@@ -5,6 +5,7 @@
 #include "rocksdb/status.h"
 #include "rocksdb/types.h"
 #include "table/format.h"
+
 #include "util.h"
 
 namespace rocksdb {
